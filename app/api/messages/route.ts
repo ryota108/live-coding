@@ -3,7 +3,7 @@ import { db } from "@/lib/db";
 import { Message } from "@prisma/client";
 import { NextResponse } from "next/server";
 
-const MESSAGES_BUTCH = 10;
+const MESSAGES_BATCH = 10;
 
 export async function GET(req: Request) {
   try {
@@ -24,7 +24,7 @@ export async function GET(req: Request) {
 
     if (cursor) {
       messages = await db.message.findMany({
-        take: MESSAGES_BUTCH,
+        take: MESSAGES_BATCH,
         skip: 1,
         cursor: {
           id: cursor,
@@ -45,7 +45,7 @@ export async function GET(req: Request) {
       });
     } else {
       messages = await db.message.findMany({
-        take: MESSAGES_BUTCH,
+        take: MESSAGES_BATCH,
         where: {
           channelId,
         },
@@ -62,13 +62,13 @@ export async function GET(req: Request) {
       });
     }
 
-    let NextCursor = null;
-    if (messages.length === MESSAGES_BUTCH) {
-      NextCursor = messages[MESSAGES_BUTCH - 1].id;
+    let nextCursor = null;
+    if (messages.length === MESSAGES_BATCH) {
+      nextCursor = messages[MESSAGES_BATCH - 1].id;
     }
 
     return NextResponse.json({
-        items:messages,NextCursor
+        items:messages,nextCursor
     })
 
   } catch (error) {
