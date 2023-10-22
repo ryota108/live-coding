@@ -7,6 +7,7 @@ import { useChatQuery } from "@/hooks/use-chat-query";
 import { Loader2, ServerCrash } from "lucide-react";
 import { ChatItem } from "./chat-item";
 import { useChatSocket } from "@/hooks/use-chat-socket";
+import { Fragment } from "react";
 
 const DATE_FORMAT = "d MMM yyyy, HH:mm";
 
@@ -74,7 +75,7 @@ export const ChatMessages = ({
       <ChatWelcome type={type} name={name} />
       <div className="flex flex-col-reverse mt-auto">
         {data?.pages?.map((group, i) => (
-          <div key={i}>
+          <Fragment key={i}>
             {group.items.map((message: MessageWithMemberWithProfile) => (
               <ChatItem
                 key={message.id}
@@ -90,7 +91,7 @@ export const ChatMessages = ({
                 socketQuery={socketQuery}
               />
             ))}
-          </div>
+          </Fragment>
         ))}
       </div>
     </div>
